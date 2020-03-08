@@ -26,7 +26,6 @@ func simpleSearch(num *big.Int) *big.Int {
 	for {
 		s := new(big.Int).Sqrt(curr)
 		tmp.Mul(s, s)
-		fmt.Printf("sqr: %s\n", sqr)
 		sign := tmp.Sub(tmp, curr).Sign()
 
 		if sign == 0 {
@@ -38,11 +37,11 @@ func simpleSearch(num *big.Int) *big.Int {
 }
 
 func main() {
-	num1Bytes, err := ioutil.ReadFile("test1")
+	num1Bytes, err := ioutil.ReadFile("test0")
 	if err != nil {
 		log.Fatal(err)
 	}
 	num1, _ := new(big.Int).SetString(string(num1Bytes[:len(num1Bytes)-1]), 10)
 	res := simpleSearch(num1)
-	log.Print(res)
+	fmt.Println(res)
 }
