@@ -1,0 +1,117 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[T1, T2A]{fontenc}
+\usepackage{cmap} % для работы поиска кириллицы в pdf
+\usepackage{fullpage}
+\usepackage{multicol,multirow}
+\usepackage{tabularx}
+\usepackage{ulem}
+\usepackage{listings} 
+\usepackage[english,russian]{babel}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{ulem}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{noindentafter}
+
+\parindent=1cm
+\linespread{1}
+\pgfplotsset{compat=1.16}
+\newcommand{\se}[1]{\section*{\bf #1}}
+
+\lstdefinestyle{custom}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  frame=L,
+  xleftmargin=\parindent,
+  numbers=left,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+}
+
+% \lstset{escapechar=@,style=customc}
+
+\makeatletter
+
+\newcommand{\print}[2]{
+	\smallbreak
+	{\large  \bf  #1}
+	{
+		\scriptsize
+		\lstinputlisting[style=custom,language=#2]{../#1}
+	}
+}
+
+\newcommand
+{\printPlain}[1]{
+	\smallbreak
+	{\large  \bf  #1}
+	{
+		\scriptsize
+		\setlength{\parindent}{0pt}
+		\lstinputlisting[breaklines=true]{../#1}
+	}
+}
+
+\linespread{1.1}
+\hfuzz=2pt
+\vbadness10
+
+\begin{document}
+
+\section*{\centering Лабораторная работа №\,1 по курсу:\\ криптография}
+
+Выполнил студент группы М8О-308Б-17 МАИ \,\, \textit{Милько Павел}.
+
+
+\se{Задача}
+Разложить каждое из чисел n1 и n2 на нетривиальные сомножители.\\
+Вариант 12.
+
+
+\noindent $n_1:$\\
+\input{../tests/test1.format}
+
+\noindent $n_2:$\\
+\input{../tests/test2.format}
+
+\se{Решение}
+
+Для поиска простых делителей я пытался использовать алгоритм факторизации Ферма.
+Метод основан на поиске чисел $x$ и $y$, которые удовлетворяют соотношению $x^2-y^2=n$,
+что приводится к разложению $(x-y)(x+y)=n$.
+Так же уравнение равносильно следующему: $x^2-n=y^2$, то есть $x^2-n$ -- квадрат.
+Для начала алгоритма выбирается наименьшее $x$, такое что $x^2>n$.
+Для каждого значения последующего значения вычисляют $(x+k)^2-n$ и проверяют, не является ли это число точным квадратом.
+Если оно является точным квадратом, то получено разложение: $n=x^2-y^2=(x-y)(x+y)$.
+Так же можно проверить число на простоту: если один из сомножителей единица, то исходное число -- простое.
+Метод работает быстро, если $n$ явлеется произведением двух близких к друг другу сомножителей.
+
+
+Программа обрабатывала первое число более 12 часов, но так и не завершила вычисления.
+Поэтому я воспользовался готовой реализацией метода решета числового поля -- \href{https://sourceforge.net/projects/msieve/}{msieve}.
+
+
+\printPlain{msieve.log}
+
+Получанные числа действительно являются сомножителями n1 и при перемножении получается исходное число.
+
+Со вторым числом такой фокус не прошёл, потому что $msieve$ н обрабатывает числа длиннее 311 символов
+(Второе число состоит из 464 символов)
+
+По совету старшекурсников, сомножители второго числа я искал как НОД с числом другого варианта. Тут мой код заработал как надо.
+
+
+\print{find.py}{python}
+
+\printPlain{test.res.format}
+
+
+\end{document}
+

@@ -17,6 +17,15 @@ func Test_findBiggerSquare(t *testing.T) {
 		want *big.Int
 	}{
 		{
+			name: "one",
+			num:  big.NewInt(1),
+		},
+		{
+			name: "5",
+			num:  big.NewInt(5),
+			want: big.NewInt(3),
+		},
+		{
 			name: "simple",
 			num:  big.NewInt(1488),
 			want: big.NewInt(39),
@@ -46,6 +55,41 @@ func Test_findBiggerSquare(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := findBiggerSquare(tt.num); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("findBiggerSquare() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_simpleSearch(t *testing.T) {
+	tests := []struct {
+		name  string
+		num   *big.Int
+		want1 *big.Int
+		want2 *big.Int
+	}{
+		{
+			name:  "six",
+			num:   big.NewInt(6),
+			want1: big.NewInt(3),
+			want2: big.NewInt(2),
+		},
+		{
+			name:  "one",
+			num:   big.NewInt(1),
+			want1: big.NewInt(1),
+			want2: big.NewInt(1),
+		},
+		{
+			name:  "five",
+			num:   big.NewInt(5),
+			want1: big.NewInt(5),
+			want2: big.NewInt(1),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got1, got2 := simpleSearch(tt.num); !(reflect.DeepEqual(got1, tt.want1) && reflect.DeepEqual(got2, tt.want2)) {
+				t.Errorf("\ngot1: %v, want1: %v\ngot2: %v, want2: %v\n", got1, tt.want1, got2, tt.want2)
 			}
 		})
 	}

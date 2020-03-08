@@ -1,47 +1,97 @@
 package main
 
 import (
+	"flag"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"math/big"
+	"os"
+)
+
+var (
+	one = big.NewInt(1)
+	two = big.NewInt(2)
 )
 
 func findBiggerSquare(num *big.Int) *big.Int {
 	res := new(big.Int)
-	res.Add(res.Sqrt(num), big.NewInt(1))
-	if res.Cmp(new(big.Int).Sub(num, big.NewInt(1))) != -1 {
+	res.Add(res.Sqrt(num), one)
+	if res.Cmp(new(big.Int).Sub(num, one)) != -1 {
 		return nil
 	}
 	return res
 }
 
-func simpleSearch(num *big.Int) *big.Int {
+const (
+	less = iota - 1
+	equal
+	more
+)
+
+func isSqaure(num *big.Int) bool {
+	tmp := new(big.Int)
+	tmp.Sqrt(num)
+	tmp.Mul(tmp, tmp)
+
+	return tmp.Cmp(num) == equal
+}
+
+func simpleSearch(num *big.Int) (*big.Int, *big.Int) {
+	k := findBiggerSquare(num)
+	if k == nil {
+		return num, one
+	}
+
 	var (
-		sqr  = findBiggerSquare(num)
-		tmp  = new(big.Int)
-		curr = new(big.Int).Sub(tmp.Mul(sqr, sqr), num)
+		prev = new(big.Int).Sub(new(big.Int).Mul(k, k), num)
+		max  = new(big.Int).Mul(num, num)
 	)
 
-	for {
-		s := new(big.Int).Sqrt(curr)
-		tmp.Mul(s, s)
-		sign := tmp.Sub(tmp, curr).Sign()
+	for prev.Cmp(max) != more {
+		if isSqaure(prev) {
+			y := new(big.Int)
+			y.Sqrt(num)
 
-		if sign == 0 {
-			return s
+			x := new(big.Int).Sub(k, y)
+
+			return x, y.Add(k, y)
 		}
-		sqr.Add(sqr, big.NewInt(1))
-		curr.Sub(tmp.Mul(sqr, sqr), num)
+
+		prev.Add(prev, k)
+		prev.Add(prev, k)
+		prev.Add(prev, one)
+
+		k.Add(k, one)
 	}
+
+	return num, one
 }
 
 func main() {
-	num1Bytes, err := ioutil.ReadFile("test0")
-	if err != nil {
-		log.Fatal(err)
+	var (
+		input string
+		in    io.Reader
+		data  string
+	)
+	flag.StringVar(&input, "i", "-", "Файл с входными данными")
+	flag.Parse()
+
+	if input == "-" {
+		in = os.Stdin
+	} else {
+		var err error
+		in, err = os.Open(input)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
-	num1, _ := new(big.Int).SetString(string(num1Bytes[:len(num1Bytes)-1]), 10)
-	res := simpleSearch(num1)
-	fmt.Println(res)
+
+	fmt.Fscan(in, &data)
+
+	fmt.Printf("%q\n", data)
+	num1, _ := new(big.Int).SetString(data, 10)
+	fmt.Println(num1)
+	a, b := simpleSearch(num1)
+	fmt.Printf("%s\n%s\n", a, b)
 }
