@@ -1,8 +1,8 @@
 \documentclass[12pt]{article}
 
 \usepackage[utf8x]{inputenc}
+\usepackage{cmap} % для работы поиска кириллицы в pdf
 \usepackage[T1, T2A]{fontenc}
-% \usepackage{cmap} % для работы поиска кириллицы в pdf
 \usepackage{fullpage}
 \usepackage{multicol,multirow}
 \usepackage{tabularx}
@@ -19,6 +19,7 @@
 \linespread{1}
 \pgfplotsset{compat=1.16}
 \newcommand{\se}[1]{\section*{\bf #1}}
+\newcommand{\pa}[1]{\subsection*{\bf #1}}
 
 \lstdefinestyle{custom}{belowcaptionskip=1\baselineskip,
   breaklines=true,
@@ -43,12 +44,14 @@
 	}
 }
 
-\newcommand{\printPlain}[1]{\smallbreak{\large  \bf  #1}
+\newcommand{\printPlain}[1]{\smallbreak{\large \bf  #1}
 	{\scriptsize
 		\setlength{\parindent}{0pt}
 		\lstinputlisting[breaklines=true]{../#1}
 	}
 }
+
+\renewcommand{\labelenumii}{\arabic{enumi}.\arabic{enumii}.}
 
 \linespread{1.1}
 \hfuzz=2pt
@@ -60,13 +63,33 @@
 
 Выполнил студент группы М8О-308Б-17 МАИ \,\, \textit{Милько Павел}.
 
-\se{Часть 1}
+\se{Задача}
 
-Создать пару OpenPGP-ключей, указав в сертификате свою почту.
+\begin{enumerate}
+    \itemСоздать пару OpenPGP-ключей, указав в сертификате свою почту. Создать её возможно, например, с помощью дополнения {\small Enigmail к почтовому клиенту thunderbird}, или из командной строки терминала ОС семейства linux.
+    \item Установить связь с преподавателем, используя созданный ключ, следующим образом:
+    \begin{enumerate}
+        \item Прислать собеседнику от своего имени по электронной почте сообщение, во вложении которого поместить свой сертификат открытого ключа и сам открытый ключ (как правило, они умещаются в одном файле).
+        \item Дождаться письма, в котором собеседник Вам пришлет сертификат своего открытого ключа.
+        \item Выслать сообщение, зашифрованное на ключе собеседника.
+        \item Дождаться ответного письма.
+        \item Расшифровать ответное письмо своим закрытым ключом.
+    \end{enumerate}
+    \item Собрать подписи под своим сертификатом открытого ключа.
+    \begin{enumerate}
+        \item Получить сертификат открытого ключа одногруппника.
+        \item Убедиться в том, что подписываемый Вами сертификат ключа принадлежит его владельцу --- путём сравнения отпечатка ключа или ключа целиком, по доверенным каналам связи.
+        \item Подписать сертификат открытого ключа одногруппника.
+        \item Передать подписанный Вами сертификат полученный в п.3.2 его владельцу, т.е.одногруппнику.
+        \item Повторив п.3.0.-3.3., собрать 10 подписей одногруппников под своим сертификатом.
+        \item Прислать преподавателю свой сертификат открытого ключа, с 10-ю или более подписями одногруппников.
+    \end{enumerate}
+\item Подписать сертификат открытого ключа преподавателя и выслать ему.
+\end{enumerate}
 
-\begin{lstlisting}[language=bash,style=custom]
-gpg --generate-key 
-\end{lstlisting}
+\pa{Часть 1: генерация ключа}
+
+\lstinline|gpg --generate-key|
 
 {\scriptsize
 \begin{lstlisting}[escapechar=|,breaklines=true]
@@ -103,6 +126,30 @@ uid                      |Милько Павел Алексеевич| <p.milko
 sub   rsa2048 2020-03-10 [E] [expires: 2022-03-10]
 \end{lstlisting}
 }
+
+\pa{Экспорт сертификата ключа в файл:}
+\lstinline|gpg --armor --export --output key.asc p.milko1999@yandex.ru|
+\printPlain{key.asc}
+
+\pa{Часть 2: расшифровка полученного сообщения с помощью ключа преподавателя}
+Зашифрованный файл:
+
+\printPlain{t3/encrypted.asc}
+
+\noindent \lstinline|gpg --decrypt --output decrypted.txt encrypted.asc|
+\smallbreak
+
+\noindent Расшифрованный файл:
+
+\printPlain{t3/decrypted.txt}
+
+Сначала я подумал, что мне по ошибке пришёл дамп http-запроса, но потом я заметил строчку ``\lstinline|Content-Transfer-Encoding: quoted-printable|''.
+
+После перекодирования тела сообщения из этой кодировки я получил следующее:
+
+``Зашифрованное сообщение 3.''
+
+\pa{Часть 3: сбор подписей одногруппников}
 
 \end{document}
 
