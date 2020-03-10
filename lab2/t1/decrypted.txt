@@ -1,0 +1,31 @@
+Content-Type: multipart/mixed; boundary="Uyj1E822zW35N2YG54DMX4XrxWJtSZCBm";
+ protected-headers="v1"
+From: awh <awh@cs.msu.ru>
+To: p.milko1999@yandex.ru
+Message-ID: <12e89910-9a0c-f4da-59ce-5f67ef804b5d@cs.msu.ru>
+Subject: =?UTF-8?B?UmU6INCe0YLQutGA0YvRgtGL0Lkg0LrQu9GO0Ycg0L/QviDQstGC0L4=?=
+ =?UTF-8?B?0YDQvtC5INC70LDQsdC+0YDQsNGC0L7RgNC90L7QuSDRgNCw0LHQvtGC0LU=?=
+References: <3521511583677268@iva6-161d47f95e63.qloud-c.yandex.net>
+ <a08a33f3-913e-3d39-168e-14fd7e149eeb@cs.msu.ru>
+ <6555551583845413@iva5-64778ce1ba26.qloud-c.yandex.net>
+In-Reply-To: <6555551583845413@iva5-64778ce1ba26.qloud-c.yandex.net>
+
+--Uyj1E822zW35N2YG54DMX4XrxWJtSZCBm
+Content-Type: text/plain; charset=utf-8
+Content-Language: ru
+Content-Transfer-Encoding: quoted-printable
+
+=D0=94=D0=B0, =D0=9F=D0=B0=D0=B2=D0=B5=D0=BB, =D0=BF=D0=BE=D0=BB=D1=83=D1=
+=87=D0=B8=D0=BB.
+
+--
+=D0=A1 =D1=83=D0=B2=D0=B0=D0=B6=D0=B5=D0=BD=D0=B8=D0=B5=D0=BC,
+ =D0=90=D0=B2=D0=B3=D1=83=D1=81=D1=82
+
+On 3/10/20 4:16 PM, p.milko1999@yandex.ru wrote:
+> =D0=9D=D0=B0=D0=B4=D0=B5=D1=8E=D1=81=D1=8C =D1=82=D0=B5=D0=BF=D0=B5=D1=80=
+=D1=8C =D1=83=D0=B3=D0=B0=D0=B4=D0=B0=D0=BB
+>=20
+
+
+--Uyj1E822zW35N2YG54DMX4XrxWJtSZCBm--
