@@ -151,5 +151,21 @@ sub   rsa2048 2020-03-10 [E] [expires: 2022-03-10]
 
 \pa{Часть 3: сбор подписей одногруппников}
 
+В качестве пробного одногруппника был выбран Алексей Куликов. Мы обменялись открытыми ключами и подписали их друг другу.
+
+Теперь мой ключ выглядит так:
+{
+\scriptsize
+\begin{lstlisting}[escapechar=|,breaklines=true]
+pub   rsa2048 2020-03-10 [SC] [expires: 2022-03-10]
+      703FD5D038947C5B57CCE5A64DF7496E16FD3CBC
+uid           [ultimate] |Милько Павел Алексеевич| <p.milko1999@yandex.ru>
+sig 3        4DF7496E16FD3CBC 2020-03-10  |Милько Павел Алексеевич| <p.milko1999@yandex.ru>
+sig 3        B104CF5F4D4DE318 2020-03-13  Alexey <kapitoshka.the.first@gmail.com>
+sub   rsa2048 2020-03-10 [E] [expires: 2022-03-10]
+sig          4DF7496E16FD3CBC 2020-03-10  |Милько Павел Алексеевич| <p.milko1999@yandex.ru>
+\end{lstlisting}
+}
+
 \end{document}
 
