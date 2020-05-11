@@ -1,0 +1,120 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{cmap} % для работы поиска кириллицы в pdf
+\usepackage[T1, T2A]{fontenc}
+\usepackage{fullpage}
+\usepackage{multicol,multirow}
+\usepackage{tabularx}
+\usepackage{ulem}
+\usepackage{listings}
+\usepackage[english,russian]{babel}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{ulem}
+\usepackage{url}
+\usepackage{hyperref}
+
+\parindent=1cm
+\linespread{1}
+\pgfplotsset{compat=1.16}
+
+\lstdefinestyle{custom}{belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  frame=L,
+  xleftmargin=\parindent,
+  numbers=left,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+}
+
+% \lstset{escapechar=@,style=customc}
+
+% \makeatletter
+
+\newcommand{\se}[1]{\section*{\bf #1}}
+\newcommand{\pa}[1]{\subsection*{\bf #1}}
+
+\newcommand{\print}[2]{\smallbreak{\large  \bf  #1}
+	{\scriptsize
+		\lstinputlisting[style=custom,language=#2]{../#1}
+	}
+}
+
+\newcommand{\printPlain}[1]{\smallbreak{\large \bf  #1}
+	{\scriptsize
+		\setlength{\parindent}{0pt}
+		\lstinputlisting[breaklines=true]{../#1}
+	}
+}
+
+\renewcommand{\labelenumii}{\arabic{enumi}.\arabic{enumii}.}
+
+\linespread{1.1}
+\hfuzz=2pt
+\vbadness10
+
+\begin{document}
+
+\section*{\centering Лабораторная работа №\,3 по курсу:\\ криптография}
+
+Выполнил студент группы М8О-308Б-17 МАИ \,\, \textit{Милько Павел}.
+
+\se{Задача}
+
+\begin{enumerate}
+	\item Строку в которой записано своё ФИО подать на вход в хеш-функцию ГОСТ Р 34.11-2012
+	      (Стрибог). Младшие 4 бита выхода интерпретировать как число, которое в дальнейшем будет
+	      номером варианта. Процесс выбора варианта требуется отразить в отчёте.
+	\item Программно реализовать один из алгоритмов функции хеширования в соответствии с
+	      номером варианта. Алгоритм содержит в себе несколько раундов.
+	\item Модифицировать оригинальный алгоритм таким образом, чтобы количество раундов
+	      было настраиваемым параметром программы. в этом случае новый алгоритм не будет
+	      являться стандартом, но будет интересен для исследования.
+	\item Применить подходы дифференциального криптоанализа к полученным алгоритмам с
+	      разным числом раундов.
+	\item Построить график зависимости количества раундов и возможности различения
+	      отдельных бит при количестве раундов 1,2,3,4,5,... .
+	\item Сделать выводы.
+\end{enumerate}
+
+\pa{Определение номера варианта}
+
+\includegraphics[width=\linewidth]{var.png}
+
+Вариант $7$ - keccak (sha3)
+
+\pa{Реализация}
+
+В качестве реализации я использовал как основу данный \href{https://github.com/ebfe/keccak}{репозиторий}.
+Для внесения изменений скопировал файл keccak.go в локальный проект.
+
+Чтобы удостовериться что в коде действительно алгоритм SHA-3 я решил свериться со
+\href{https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf}{стандартом}.
+Там даже есть ссылка на примеры (25 страница), но увы пользоваться ими очень неудобно
+потому что приведены вычисления для сообщений размером 0, 5, 30, 1600, 1605 и 1630 бит.
+
+Из этого чудного многообразия есть возможность протестировать корректность только для
+примеров длиной
+\href{https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/SHA3-256_Msg0.pdf}{0}
+и
+\href{https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/SHA3-256_1600.pdf}{1600}
+бит, так как эти числа кратны восьми и можно передавать их байтами.
+
+Тест с пустым сообщением выдал такой же хеш как и в официальном примере. Но для примера в 1600 бит
+одинакового результата не получилось.
+
+По самим примерам нереально даже понять правильно ли мною скопированы входные данные,
+поэтому для проверки корректности результата я воспользовался официальной библиотекой
+\href{https://pkg.go.dev/golang.org/x/crypto/sha3?tab=doc}{sha3} для языка го и
+дополнительно проверил корректность аналогичной библиотекой для питона.
+
+
+
+
+\end{document}
+

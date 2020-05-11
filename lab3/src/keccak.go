@@ -1,9 +1,10 @@
 // Package keccak implements the Keccak (SHA-3) hash algorithm.
 // http://keccak.noekeon.org / FIPS 202 draft.
+
 package main
 
 const (
-	domainNone  = 1
+	domainNone  = 0x01
 	domainSHA3  = 0x06
 	domainSHAKE = 0x1f
 )
@@ -42,19 +43,19 @@ func newKeccak(capacity, output int, domain byte) *keccak {
 }
 
 func New224() *keccak {
-	return newKeccak(224*2, 224, domainNone)
+	return newKeccak(224*2, 224, domainSHA3)
 }
 
 func New256() *keccak {
-	return newKeccak(256*2, 256, domainNone)
+	return newKeccak(256*2, 256, domainSHA3)
 }
 
 func New384() *keccak {
-	return newKeccak(384*2, 384, domainNone)
+	return newKeccak(384*2, 384, domainSHA3)
 }
 
 func New512() *keccak {
-	return newKeccak(512*2, 512, domainNone)
+	return newKeccak(512*2, 512, domainSHA3)
 }
 
 func (k *keccak) Write(b []byte) (int, error) {
@@ -118,8 +119,7 @@ func (k *keccak) absorb(block []byte) {
 	keccakf(&k.S)
 }
 
-func (k *keccak) pad(block []byte) []byte {
-
+func (k *keccak) pad() []byte {
 	padded := make([]byte, k.blockSize)
 
 	copy(padded, k.buf)
@@ -130,7 +130,7 @@ func (k *keccak) pad(block []byte) []byte {
 }
 
 func (k *keccak) final() {
-	last := k.pad(k.buf)
+	last := k.pad()
 	k.absorb(last)
 }
 

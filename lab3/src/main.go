@@ -1,18 +1,28 @@
 package main
 
 import (
+	"encoding/hex"
 	"fmt"
-	// "github.com/ebfe/keccak"
-	// "golang.org/x/crypto/sha3"
+	"hash"
+	"os"
+
+	"golang.org/x/crypto/sha3"
 )
 
+func getHash(h hash.Hash, name string, data []byte) {
+	h.Write(data)
+
+	fmt.Printf("%+22s : %s\n", name, hex.EncodeToString(h.Sum(nil)))
+}
+
 func main() {
-	h := New256()
-	// h := sha3.NewLegacyKeccak256()
-	// fmt.Println("vim-go")
-	_, _ = h.Write([]byte("Милько Павел Алексеевич"))
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	fmt.Println(string(h.Sum(nil)))
+	var data []byte
+
+	if len(os.Args) == 2 {
+		data = []byte(os.Args[1])
+	}
+
+	getHash(New256(), "keccak 256", data)
+	getHash(sha3.NewLegacyKeccak256(), "legacy stl keccak 256", data)
+	getHash(sha3.New256(), "stl keccak 256", data)
 }
