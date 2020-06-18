@@ -20,20 +20,33 @@ func load(path string) []byte {
 }
 
 // correlate matching symbols
-func correlate(a, b []byte, n int) float64 {
+func correlate(a, b []byte, limit, offset int) float64 {
 	min := len(a)
 	if len(b) < min {
 		min = len(b)
 	}
 
-	if n < min {
-		min = n
+	if offset < 0 {
+		offset = 0
+	}
+	if offset > min {
+		fmt.Println("Смещение больше чем размер файла")
+		os.Exit(1)
+	}
+
+	if limit < min-offset && limit > 0 {
+		min = limit + offset
+	}
+
+	if offset > min {
+		fmt.Println("Смещение больше чем размер файла")
+		os.Exit(1)
 	}
 
 	// count of matching symbols
 	count := 0
 
-	for idx := 0; idx < min; idx++ {
+	for idx := offset; idx < min; idx++ {
 		if a[idx] == b[idx] {
 			count++
 		}
@@ -43,7 +56,8 @@ func correlate(a, b []byte, n int) float64 {
 }
 
 func main() {
-	cut := flag.Int("n", -1, "количество обрабатываемых символов. -1 ограничивает размер минимальным из текстов")
+	limit := flag.Int("n", -1, "количество обрабатываемых символов. -1 ограничивает размер минимальным из текстов")
+	offset := flag.Int("s", 0, "смещение относительно начала файла")
 	flag.Parse()
 
 	if flag.NArg() != 2 {
@@ -51,10 +65,13 @@ func main() {
 		os.Exit(2)
 	}
 
-	a := load(flag.Arg(1))
-	b := load(flag.Arg(2))
+	a := load(flag.Arg(0))
+	b := load(flag.Arg(1))
 
-	num := correlate(a, b, *cut)
+	num := correlate(a, b, *limit, *offset)
 
-	fmt.Printf("Отношение совпадающих символов к общему количеству символов: %f\n", num)
+	fmt.Printf("Файлы %q, %q. Ограничение размера: %d, смещение: %d\n",
+		flag.Arg(0), flag.Arg(1),
+		*limit, *offset)
+	fmt.Printf("Отношение совпадающих символов к общему количеству символов: %f\n\n", num)
 }
