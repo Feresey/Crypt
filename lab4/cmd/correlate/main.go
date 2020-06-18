@@ -52,6 +52,24 @@ func correlate(a, b []byte, limit, offset int) (count int, size int) {
 	return count, size
 }
 
+// func summarize(m *map[byte]int, b []byte) {
+// 	for _, sym := range b {
+// 		(*m)[strings.ToLower(string(sym))[0]]++
+// 	}
+// }
+
+// func show(m map[byte]int, size int) {
+// 	keys := make([]string, 0, len(m))
+// 	for key, value := range m {
+// 		keys = append(keys,
+// 			fmt.Sprintf("%f:%q\n", float64(value)/float64(size), string(key)),
+// 		)
+// 	}
+
+// 	sort.Strings(keys)
+// 	fmt.Println(keys)
+// }
+
 func main() {
 	limit := flag.Int("n", -1, "количество обрабатываемых символов. -1 ограничивает размер минимальным из текстов")
 	offset := flag.Int("s", 0, "смещение относительно начала файла")
@@ -65,14 +83,19 @@ func main() {
 	a := load(flag.Arg(0))
 	b := load(flag.Arg(1))
 
+	// m := make(map[byte]int)
+
+	// summarize(&m, a)
+	// summarize(&m, b)
+
 	count, size := correlate(a, b, *limit, *offset)
+	// show(m, len(a)+len(b))
 
-	fmt.Printf(`%d & %d & %f\\ \hline`+"\n", size-*offset, *offset, float64(count)/float64(size))
+	// fmt.Printf(`%d & %d & %f\\ \hline`+"\n", size-*offset, *offset, float64(count)/float64(size))
+
+	fmt.Printf("Файлы %q, %q. Ограничение размера: %d, смещение: %d\n",
+		flag.Arg(0), flag.Arg(1),
+		size-*offset, *offset)
+	fmt.Printf("Отношение совпадающих символов к общему количеству символов: %f\n\n",
+		float64(count)/float64(size))
 }
-
-// 	fmt.Printf("Файлы %q, %q. Ограничение размера: %d, смещение: %d\n",
-// 		flag.Arg(0), flag.Arg(1),
-// 		size, *offset)
-// 	fmt.Printf("Отношение совпадающих символов к общему количеству символов: %f\n\n",
-// 		float64(count)/float64(size))
-// }
