@@ -20,39 +20,36 @@ func load(path string) []byte {
 }
 
 // correlate matching symbols
-func correlate(a, b []byte, limit, offset int) float64 {
-	min := len(a)
-	if len(b) < min {
-		min = len(b)
+func correlate(a, b []byte, limit, offset int) (count int, size int) {
+	size = len(a)
+	if len(b) < size {
+		size = len(b)
 	}
 
 	if offset < 0 {
 		offset = 0
 	}
-	if offset > min {
+	if offset > size {
 		fmt.Println("Смещение больше чем размер файла")
 		os.Exit(1)
 	}
 
-	if limit < min-offset && limit > 0 {
-		min = limit + offset
+	if limit < size-offset && limit > 0 {
+		size = limit + offset
 	}
 
-	if offset > min {
+	if offset > size {
 		fmt.Println("Смещение больше чем размер файла")
 		os.Exit(1)
 	}
 
-	// count of matching symbols
-	count := 0
-
-	for idx := offset; idx < min; idx++ {
+	for idx := offset; idx < size; idx++ {
 		if a[idx] == b[idx] {
 			count++
 		}
 	}
 
-	return float64(count) / float64(min)
+	return count, size
 }
 
 func main() {
@@ -68,10 +65,14 @@ func main() {
 	a := load(flag.Arg(0))
 	b := load(flag.Arg(1))
 
-	num := correlate(a, b, *limit, *offset)
+	count, size := correlate(a, b, *limit, *offset)
 
-	fmt.Printf("Файлы %q, %q. Ограничение размера: %d, смещение: %d\n",
-		flag.Arg(0), flag.Arg(1),
-		*limit, *offset)
-	fmt.Printf("Отношение совпадающих символов к общему количеству символов: %f\n\n", num)
+	fmt.Printf(`%d & %d & %f\\ \hline`+"\n", size-*offset, *offset, float64(count)/float64(size))
 }
+
+// 	fmt.Printf("Файлы %q, %q. Ограничение размера: %d, смещение: %d\n",
+// 		flag.Arg(0), flag.Arg(1),
+// 		size, *offset)
+// 	fmt.Printf("Отношение совпадающих символов к общему количеству символов: %f\n\n",
+// 		float64(count)/float64(size))
+// }
