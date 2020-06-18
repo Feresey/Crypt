@@ -1,0 +1,107 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{cmap} % для работы поиска кириллицы в pdf
+\usepackage[T1, T2A]{fontenc}
+\usepackage{fullpage}
+\usepackage{multicol,multirow}
+\usepackage{tabularx}
+\usepackage{ulem}
+\usepackage{listings}
+\usepackage[english,russian]{babel}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{ulem}
+\usepackage{url}
+\usepackage{hyperref}
+
+\parindent=1cm
+\linespread{1}
+\pgfplotsset{compat=1.16}
+
+\lstdefinestyle{custom}{belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  frame=L,
+  xleftmargin=\parindent,
+  numbers=left,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+}
+
+% \lstset{escapechar=@,style=customc}
+
+% \makeatletter
+
+\newcommand{\se}[1]{\section*{\bf #1}}
+\newcommand{\pa}[1]{\subsection*{\bf #1}}
+
+\newcommand{\print}[2]{\smallbreak{\large  \bf  #1}
+	\begin{verse}
+	\input{#2}
+	\end{verse}
+}
+
+\newcommand{\printPlain}[1]{\smallbreak{\large \bf  #1}
+	{\scriptsize
+		\setlength{\parindent}{0pt}
+		\lstinputlisting[breaklines=true]{../#1}
+	}
+}
+
+\renewcommand{\labelenumii}{\arabic{enumi}.\arabic{enumii}.}
+
+\linespread{1.1}
+\hfuzz=2pt
+\vbadness10
+
+\begin{document}
+
+\section*{\centering Лабораторная работа №\,4 по курсу:\\ криптография}
+
+Выполнил студент группы М8О-308Б-17 МАИ \,\, \textit{Милько Павел}.
+
+\se{Задача}
+
+Сравнить:
+
+\begin{enumerate}
+	\item Два осмысленных текста на естественном языке
+	\item Осмысленный текст и текст из случайных букв.
+	\item Осмысленный текст и текст из случайных слов.
+	\item Два текста из случайных букв.
+	\item Два текста из случайных слов.
+\end{enumerate}
+
+Как сравнивать: считать процент совпадения букв в сравниваемых текстах -- получить
+дробное значение от 0 до 1 как результат деления количества совпадений на общее число
+букв. Расписать подробно в отчёте алгоритм сравнения и приложить сравниваемые тексты в
+отчёте хотя бы для одного запуска по всем пяти подпунктам. Осознать какие значения
+получаются в этих пяти подпунктах. Привести свои соображения о том почему так
+происходит.
+
+Длина сравниваемых текстов должна совпадать. Привести соображения о том какой длины
+текста должно быть достаточно для корректного сравнения.
+
+\subsection*{Алгоритм сравнения}
+
+Символы двух текстов сравниваются по их индексам относительно начала текста.
+Необходимое отношение легко найти разделив количество совпадений на длину текста.
+
+\subsection*{Входные данные}
+
+В качестве примеров осмысленного текста я выбрал роман Жюля Верна -- ``20 000 лье под водой'' и 
+роман Джоан Роулинг -- ``Гарри Поттер и философский камень''.
+
+\newpage
+
+\print{20 000 лье под водой}{../testdata/jule_head.txt}
+\print{Гарри Поттер и философский камень}{../testdata/harry_head.txt}
+
+
+
+\end{document}
+
